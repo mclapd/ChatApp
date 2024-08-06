@@ -1,3 +1,4 @@
+import 'package:chatapp/components/chat_bubble.dart';
 import 'package:chatapp/components/my_textfield.dart';
 import 'package:chatapp/services/auth/auth_service.dart';
 import 'package:chatapp/services/chat/chat_service.dart';
@@ -26,7 +27,12 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(receiverEmail)),
+      appBar: AppBar(
+        title: Text(receiverEmail),
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
+        elevation: 0,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -72,27 +78,43 @@ class ChatPage extends StatelessWidget {
         crossAxisAlignment:
             isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(data["message"]),
+          ChatBubble(
+            message: data["message"],
+            isCurrentUser: isCurrentUser,
+          )
         ],
       ),
     );
   }
 
   Widget _buildUserInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: MyTextField(
-            controller: _messageController,
-            hintText: "Enter message",
-            obscureText: false,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: MyTextField(
+              controller: _messageController,
+              hintText: "Enter message",
+              obscureText: false,
+            ),
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.arrow_upward),
-          onPressed: sendMessage,
-        ),
-      ],
+          Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.green,
+            ),
+            margin: const EdgeInsets.only(right: 25.0),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_upward,
+                color: Colors.white,
+              ),
+              onPressed: sendMessage,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
